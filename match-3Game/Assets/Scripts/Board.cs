@@ -8,10 +8,13 @@ public class Board : MonoBehaviour
     public int height;
     public GameObject tilePrefab;
     private BackgroundTile[,] allTiles;
+    public GameObject[] dots;
+    public GameObject[,] allDots;
 
     void Start()
     {
         allTiles = new BackgroundTile[width, height];
+        allDots = new GameObject[width, height];
         SetUp();
     }
     private void SetUp()
@@ -21,7 +24,15 @@ public class Board : MonoBehaviour
             for (int j = 0; j < height; j++)
             {
                 Vector2 tempPosition = new Vector2(i, j);
-                Instantiate(tilePrefab, tempPosition, Quaternion.identity);
+                GameObject backgroundTile = Instantiate(tilePrefab, tempPosition, Quaternion.identity) as GameObject;
+                backgroundTile.transform.parent = this.transform;
+                backgroundTile.name = "( " + i + ", " + j + " )";
+
+                int DotToUse = Random.Range(0, dots.Length);
+                GameObject dot = Instantiate(dots[DotToUse], tempPosition, Quaternion.identity);
+                dot.transform.parent = this.transform;
+                dot.name = "( " + i + ", " + j + " )";
+                allDots[i, j] = dot;
             }
         }
     }
